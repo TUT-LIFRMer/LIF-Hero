@@ -1,5 +1,13 @@
 {
     "files.associations": {
-        "main.h": "c"
+        "main.h": "c",
+        "struct_typedef.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "bsp_can.h": "c",
+        "stm32f4xx_hal_can.h": "c",
+        "stm32f4xx_hal_can_legacy.h": "c",
+        "cmsis_os.h": "c",
+        "can.h": "c",
+        "bsp_buzzer.h": "c"
     }
 }
