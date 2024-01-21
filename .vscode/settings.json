@@ -8,6 +8,23 @@
         "stm32f4xx_hal_can_legacy.h": "c",
         "cmsis_os.h": "c",
         "can.h": "c",
-        "bsp_buzzer.h": "c"
-    }
+        "bsp_buzzer.h": "c",
+        "bsp_crc32.h": "c",
+        "bsp_delay.h": "c",
+        "bsp_flash.h": "c",
+        "string.h": "c",
+        "bsp_fric.h": "c",
+        "compare": "c",
+        "bsp_adc.h": "c",
+        "bsp_laser.h": "c",
+        "bsp_led.h": "c",
+        "bsp_servo_pwm.h": "c",
+        "DWT.C": "cpp",
+        "dwt.h": "c",
+        "DWT.H": "cpp",
+        "cstdint": "c",
+        "led_rgb_flow_task.h": "c",
+        "adc.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

@@ -1,7 +1,7 @@
 #include "bsp_buzzer.h"
 #include "main.h"
 extern TIM_HandleTypeDef htim4;
-void buzzer_on(uint16_t psc, uint16_t pwm)
+void buzzer_on(djiuint16_t psc, djiuint16_t pwm)
 {
     __HAL_TIM_PRESCALER(&htim4, psc);
     __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_3, pwm);

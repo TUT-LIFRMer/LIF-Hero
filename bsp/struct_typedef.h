@@ -2,19 +2,19 @@
 #define STRUCT_TYPEDEF_H
 
 
-typedef signed char int8_t;
-typedef signed short int int16_t;
-typedef signed int int32_t;
-typedef signed long long int64_t;
+typedef signed char djiint8_t;
+typedef signed short int djiint16_t;
+typedef signed int djiint32_t;
+typedef signed long long djiint64_t;
 
 /* exact-width unsigned integer types */
-typedef unsigned char uint8_t;
-typedef unsigned short int uint16_t;
-typedef unsigned int uint32_t;
-typedef unsigned long long uint64_t;
-typedef unsigned char bool_t;
-typedef float fp32;
-typedef double fp64;
+typedef unsigned char djiuint8_t;
+typedef unsigned short int djiuint16_t;
+typedef unsigned int djiuint32_t;
+typedef unsigned long long djiuint64_t;
+typedef unsigned char djibool_t;
+typedef float djifp32;
+typedef double djifp64;
 
 
 #endif

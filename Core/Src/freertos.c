@@ -48,13 +48,15 @@
 
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
+osThreadId ledHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-
+extern void led_RGB_flow_task(void const * argument);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
+void led_RGB_flow_task(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -105,8 +107,13 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
+  /* definition and creation of led */
+  osThreadDef(led, led_RGB_flow_task, osPriorityNormal, 0, 256);
+  ledHandle = osThreadCreate(osThread(led), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -127,6 +134,24 @@ void StartDefaultTask(void const * argument)
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_led_RGB_flow_task */
+/**
+* @brief Function implementing the led thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_led_RGB_flow_task */
+__weak void led_RGB_flow_task(void const * argument)
+{
+  /* USER CODE BEGIN led_RGB_flow_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END led_RGB_flow_task */
 }
 
 /* Private application code --------------------------------------------------*/
