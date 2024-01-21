@@ -98,8 +98,8 @@ Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c \
-Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c  
-
+Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c \
+#components\support\CRC8_CRC16.c \
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32f407xx.s
@@ -124,7 +124,7 @@ SZ = $(PREFIX)size
 endif
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
- 
+
 #######################################
 # CFLAGS
 #######################################
@@ -142,12 +142,15 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 
 # macros for gcc
 # AS defines
-AS_DEFS = 
+AS_DEFS =
 
 # C defines
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
--DSTM32F407xx
+-DSTM32F407xx \
+-DARM_MATH_CM4 \
+-DARM_MATH_MATRIX_CHECK \
+-DARM_MATH_ROUNDING \
 
 
 # AS includes
@@ -166,9 +169,14 @@ C_INCLUDES =  \
 -IMiddlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
--Irtt \
-
-
+-Ibsp/boards \
+-Icomponents/algorithm/Include \
+-Icomponents/controller \
+-Icomponents/devices \
+-Icomponents/support \
+-Icomponents/algorithm \
+-Imodules \
+-Irtt
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
@@ -190,8 +198,8 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDSCRIPT = STM32F407IGHx_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lnosys 
-LIBDIR = 
+LIBS = -lc -lm -lnosys
+LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
@@ -208,7 +216,7 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
@@ -220,22 +228,29 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
-	
+
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
-	
+	$(BIN) $< $@
+
 $(BUILD_DIR):
-	mkdir $@		
+	mkdir $@
 
 #######################################
 # clean up
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
-  
+
 #######################################
 # dependencies
 #######################################
 -include $(wildcard $(BUILD_DIR)/*.d)
+#######################################
+# download directl without debugging
+#######################################
+download_dap:
+	openocd -f openocd_dap.cfg -c init -c halt -c "flash write_image erase $(BUILD_DIR)/$(TARGET).bin 0x08000000" -c reset -c shutdown
+download_jlink:
+	JFlash -openprj'stm32.jflash' -open'$(BUILD_DIR)/$(TARGET).hex',0x8000000 -auto -startapp -exit
 
 # *** EOF ***

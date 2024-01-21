@@ -24,7 +24,11 @@
         "DWT.H": "cpp",
         "cstdint": "c",
         "led_rgb_flow_task.h": "c",
-        "adc.h": "c"
+        "adc.h": "c",
+        "protocol.h": "c",
+        "stdio.h": "c",
+        "referee.h": "c",
+        "crc8_crc16.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
